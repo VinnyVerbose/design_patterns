@@ -1,4 +1,4 @@
-class OrderItem{
+export default class OrderItem{
     constructor(menuItem){
         this.menuItem = menuItem;
         this.quantity = 1;

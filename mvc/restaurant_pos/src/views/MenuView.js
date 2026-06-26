@@ -9,9 +9,11 @@ export default class MenuView{
 
     renderMenuItems(){
         return this.menuItems.map(item => {
-            return `<div>${item.name}</div>
-                    <div>${item.price}</div>
-                    <button>Add</button>`
+            return `<div class="menu-item">
+                        <div>${item.name}</div>
+                        <div>${item.price.toFixed(2)}</div>
+                        <button class="btnMenuItem" data-id="${item.id}">Add</button>
+                    </div>`
         }).join('');
     }
 
