@@ -12,16 +12,18 @@ export default class Order{
     }
 
     getSubtotal(){
-        return this.orderItems.reduce((acc, item) => {
+        let subtotal =  this.orderItems.reduce((acc, item) => {
             return acc + item.getLineTotal();
         }, 0);
+
+        return subtotal;
     }
 
     getTax(){
-        return this.getSubtotal() * 0.07;
+        return (this.getSubtotal() * 0.07);
     }
 
     getTotal(){
-        return this.getSubtotal() + this.getTax();
+        return (Number(this.getSubtotal()) + Number(this.getTax()));
     }
 }

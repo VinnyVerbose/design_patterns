@@ -27,5 +27,5 @@ const menuView = new MenuView(menuItems);
 menuView.renderMenu();
 
 const order = new Order();
-const orderView = new OrderView();
+const orderView = new OrderView(order);
 const posController = new POSController(menuItems, order, menuView, orderView);
