@@ -20,10 +20,28 @@ export default class POSController{
                 this.addMenuItemToOrder(menuItem);
             })
         });
+
+        this.orderView.orderElement.addEventListener('click', (e) => {
+            if(e.target.classList.contains('btnOrderItemInc')){
+                this.order.orderItems.find(item => item.id === e.target.dataset.id).incrementQuantity();
+                this.orderView.render();
+            }
+
+            if(e.target.classList.contains('btnOrderItemDec')){
+                this.order.orderItems.find(item => item.id === e.target.dataset.id).decrementQuantity();
+                this.orderView.render();
+            }
+
+            if(e.target.classList.contains('btnPurchase')){
+                this.orderView.renderReceipt();
+            } else if(e.target.classList.contains('btnClose')){
+                location.reload();
+            }
+        })
     }
 
     addMenuItemToOrder(menuItem){
         this.order.addItem(new OrderItem(menuItem));
-        this.orderView.render(this.order);
+        this.orderView.render();
     }
 }
