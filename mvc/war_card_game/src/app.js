@@ -5,3 +5,4 @@ import GameController from './controllers/GameController.js';
 const game = 
 new GameController(new PlayerModel('Vinny'), new PlayerModel(), new DeckModel());
 
+game.playHand();

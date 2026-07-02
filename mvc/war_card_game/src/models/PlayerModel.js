@@ -13,6 +13,6 @@ export default class PlayerModel{
             return this.cards.splice(this.cards.length - 4);
         }
 
-        return this.cards;
+        return this.cards.splice(0);
     }
 }
