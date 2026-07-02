@@ -11,9 +11,11 @@ export default class GameController{
     }
 
     playHand(){
-        while(!this.gameOver){
+        // while(!this.gameOver){
             const p1Hand = this.p1.playHand();
             const p2Hand = this.p2.playHand();
+
+            
 
             if(p1Hand.length === 0 || p2Hand.length === 0){ 
                 this.announceWinner();
@@ -22,12 +24,16 @@ export default class GameController{
 
             if(p1Hand[0].val > p2Hand[0].val){
                 this.p1.addCards([...this.warCards.splice(0), ...p1Hand, ...p2Hand]);
+                this.view.renderPlayers(this.p1, this.p2);
                 console.log(`${this.p1.name} Won Hand`);
+                this.view.renderHand(p1Hand, p2Hand, this.p1);
                 console.log(this.p1.cards.length, this.p2.cards.length, p1Hand[0].val, p2Hand[0].val)
                 console.log(this.p1.cards, this.p2.cards, this.warCards);
             } else if(p2Hand[0].val > p1Hand[0].val){
                 this.p2.addCards([...this.warCards.splice(0), ...p2Hand, ...p1Hand]);
+                this.view.renderPlayers(this.p1, this.p2);
                 console.log(`${this.p2.name} Won Hand`);
+                this.view.renderHand(p1Hand, p2Hand, this.p2);
                 console.log(this.p1.cards.length, this.p2.cards.length, p1Hand[0].val, p2Hand[0].val)
                 console.log(this.p1.cards, this.p2.cards, this.warCards);
             } else {
@@ -35,10 +41,10 @@ export default class GameController{
                 this.warCards = [...this.warCards, ...p1Hand, ...p2Hand];
                 console.log(this.p1.cards.length, this.p2.cards.length, p1Hand[0].val, p2Hand[0].val)
                 console.log(this.p1.cards, this.p2.cards, this.warCards);
+                this.view.renderHand(p1Hand, p2Hand);
                 return this.playHand();
             }
-        }
-        
+        // }
     }
 
     announceWinner(){
