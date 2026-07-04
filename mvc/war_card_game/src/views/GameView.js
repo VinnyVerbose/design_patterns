@@ -10,8 +10,13 @@ export default class GameView{
         this.rootElement.appendChild(this.playersElement);
         this.rootElement.appendChild(this.button);
         this.rootElement.appendChild(this.handList);
+
+        
     }
 
+    bindPlayButton(handler) {
+        this.button.addEventListener("click", handler);
+    }
 
     renderPlayers(p1, p2){
         this.playersElement.innerHTML =  
@@ -43,7 +48,7 @@ export default class GameView{
             </div>
 
             <div class="hand-result">
-                ${winner ? winner.name + " has won the hand!" : "War!"}
+                ${winner ? winner + " has won the hand!" : "War!"}
             </div>
 
             <div class="player-hand p2Hand">

@@ -19,7 +19,11 @@ export default class DeckModel{
         this.deck = shuffled;
     }
 
-    dealToPlayers(p1, p2){
+    drawCard(){
+        return this.deck.pop();
+    }
+
+    drawCards(){
         p1.addCards(this.deck.splice(this.deck.length / 2));
         p2.addCards(this.deck.splice(0));
     }

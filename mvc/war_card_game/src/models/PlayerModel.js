@@ -8,9 +8,9 @@ export default class PlayerModel{
         this.cards = [...cardsArr, ...this.cards];
     }
 
-    playHand(){
-        if(this.cards.length >= 4){
-            return this.cards.splice(this.cards.length - 4);
+    drawCards(num){
+        if(this.cards.length >= num){
+            return this.cards.splice(this.cards.length - num);
         }
 
         return this.cards.splice(0);
