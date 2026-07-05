@@ -6,7 +6,14 @@ export default class GameModel {
         this.warCards = [];
         this.gameOver = false;
 
-        this.deck.dealToPlayers(this.p1, this.p2);
+        this.dealInitialCards(this.p1, this.p2);
+    }
+
+    dealInitialCards(){
+        while(this.deck.cardsRemaining() > 0){
+            this.p1.addCards(this.deck.drawCards(1));
+            this.p2.addCards(this.deck.drawCards(1));
+        }
     }
 
     playTurn() {

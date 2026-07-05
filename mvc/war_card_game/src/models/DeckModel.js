@@ -6,6 +6,10 @@ export default class DeckModel{
         this.createCards();
     }
 
+    cardsRemaining(){
+        return this.deck.length;
+    }
+
     shuffleDeck(){
         const shuffled = [...this.deck]; 
         
@@ -23,9 +27,12 @@ export default class DeckModel{
         return this.deck.pop();
     }
 
-    drawCards(){
-        p1.addCards(this.deck.splice(this.deck.length / 2));
-        p2.addCards(this.deck.splice(0));
+    drawCards(number){
+        for(let i = 0; i < number; i++){
+            return this.deck.splice(0, number);
+        }
+        // p1.addCards(this.deck.splice(this.deck.length / 2));
+        // p2.addCards(this.deck.splice(0));
     }
 
     createCards() {
