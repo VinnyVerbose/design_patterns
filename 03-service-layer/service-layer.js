@@ -2,6 +2,10 @@
 // Design Pattern: Service Layer
 // ======================================================
 //
+// Prerequisites:
+// - MVC Controller
+// - Repository Pattern
+//
 // Purpose:
 // The Service Layer pattern moves business logic out of
 // the Controller and into a dedicated Service class.
@@ -29,7 +33,10 @@
 //            OrderService    ← Service Layer
 //                    │
 //                    ▼
-//               Order (Model)
+//          OrderRepository   ← Repository Pattern
+//                    │
+//                    ▼
+//             In-Memory Array
 //
 // The View communicates with the Controller.
 //
@@ -37,8 +44,7 @@
 //
 // The Service performs the application's business logic.
 //
-// The completed Model is returned to the Controller,
-// which then returns it to the View.
+// The Repository handles data access.
 //
 // ======================================================
 
@@ -48,14 +54,11 @@
 // Model
 // ------------------------------------------------------
 // Represents an Order in our application.
-//
-// Models are responsible for representing data.
-// They should not contain the application's business
-// workflow.
 // ======================================================
 
 class Order {
-    constructor(customerName, items, total) {
+    constructor(id, customerName, items, total) {
+        this.id = id;
         this.customerName = customerName;
         this.items = items;
         this.total = total;
@@ -65,26 +68,49 @@ class Order {
 
 
 // ======================================================
+// Repository
+// ------------------------------------------------------
+// Responsible for storing and retrieving Orders.
+// ======================================================
+
+class OrderRepository {
+    constructor() {
+        this.orders = [];
+    }
+
+    save(order) {
+        this.orders.push(order);
+    }
+
+    findAll() {
+        return this.orders;
+    }
+}
+
+
+
+// ======================================================
 // Service Layer
 // ------------------------------------------------------
-// This class contains the application's business logic.
+// Responsible for business logic.
 //
-// Instead of putting business rules inside the MVC
-// Controller, we move them here.
-//
-// In this example the Service:
+// In this example, the Service:
 //
 // • Validates the customer
 // • Validates the order
 // • Calculates the total
-// • Creates an Order object
+// • Creates an Order
+// • Saves the Order using the Repository
 //
-// The Controller simply delegates to this class.
 // ======================================================
 
 class OrderService {
-    placeOrder(customerName, items) {
+    constructor(orderRepository) {
+        this.orderRepository = orderRepository;
+        this.nextId = 1;
+    }
 
+    placeOrder(customerName, items) {
         if (!customerName) {
             throw new Error("Customer name is required.");
         }
@@ -97,7 +123,13 @@ class OrderService {
             return sum + item.price;
         }, 0);
 
-        return new Order(customerName, items, total);
+        const order = new Order(this.nextId, customerName, items, total);
+
+        this.nextId++;
+
+        this.orderRepository.save(order);
+
+        return order;
     }
 }
 
@@ -106,25 +138,10 @@ class OrderService {
 // ======================================================
 // MVC Controller
 // ------------------------------------------------------
-// This is the same Controller you would have in an MVC
-// application.
-//
-// Without the Service Layer, all of the business logic
-// would likely live here.
-//
-// With the Service Layer, the Controller becomes much
-// smaller.
-//
-// Its job is simply to:
-//
-// 1. Receive the request.
-// 2. Delegate work to the Service.
-// 3. Return the result.
-//
+// Receives the request and delegates to the Service.
 // ======================================================
 
 class OrderController {
-
     constructor(orderService) {
         this.orderService = orderService;
     }
@@ -138,28 +155,10 @@ class OrderController {
 
 // ======================================================
 // Demo
-// ------------------------------------------------------
-// Imagine a user clicks a "Place Order" button.
-//
-// The application flow is:
-//
-// User
-//   │
-//   ▼
-// View
-//   │
-//   ▼
-// OrderController
-//   │
-//   ▼
-// OrderService
-//   │
-//   ▼
-// Order
-//
 // ======================================================
 
-const orderService = new OrderService();
+const orderRepository = new OrderRepository();
+const orderService = new OrderService(orderRepository);
 const orderController = new OrderController(orderService);
 
 const order = orderController.placeOrder("Alice", [
@@ -169,6 +168,7 @@ const order = orderController.placeOrder("Alice", [
 
 console.log("Order placed successfully.\n");
 
+console.log(`Order ID: ${order.id}`);
 console.log(`Customer: ${order.customerName}\n`);
 
 console.log("Items:");
@@ -178,3 +178,6 @@ order.items.forEach(item => {
 });
 
 console.log(`\nTotal: $${order.total}`);
+
+console.log("\nAll saved orders:");
+console.log(orderRepository.findAll());
